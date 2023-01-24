@@ -11,7 +11,7 @@ class WalletForm extends Component {
     method: 'Dinheiro',
     tag: 'Alimentação',
     exchangeRates: '',
-    id: -1,
+    id: 0,
   };
 
   componentDidMount() {
@@ -25,13 +25,13 @@ class WalletForm extends Component {
   };
 
   onClickChange = async () => {
-    const { dispatch } = this.props;
+    const { dispatch, removeValue } = this.props;
     fetch('https://economia.awesomeapi.com.br/json/all').then((response) => response.json()).then((currencies) => {
       delete currencies.USDT;
       this.setState((prevState) => ({
         ...prevState,
         exchangeRates: currencies,
-        id: prevState.id + 1,
+        id: removeValue,
       }), () => {
         dispatch(newExpenses(this.state));
         this.setState((prevState) => ({
@@ -132,10 +132,12 @@ class WalletForm extends Component {
 WalletForm.propTypes = ({
   dispatch: Proptypes.func.isRequired,
   currencies: Proptypes.arrayOf(Proptypes.string.isRequired).isRequired,
+  removeValue: Proptypes.number.isRequired,
 });
 
 const mapStateToProps = (state) => ({
   currencies: state.wallet.currencies,
+  removeValue: state.wallet.expenses.length,
 });
 
 export default connect(mapStateToProps)(WalletForm);

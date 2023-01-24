@@ -2,6 +2,7 @@
 export const LOGIN_EMAIL = 'LOGIN_EMAIL';
 export const GET_CURRENCIES = 'GET_CURRENCIES';
 export const NEW_EXPENSES = 'NEW_EXPENSES';
+export const CLEAR_EXPENSES = 'CLEAR_EXPENSES';
 
 // ACTIONS CREATORS
 export const loginEmail = (email) => ({
@@ -17,6 +18,11 @@ export const getCurrencies = (currencies) => ({
 export const newExpenses = (state) => ({
   type: NEW_EXPENSES,
   state,
+});
+
+export const clearExpenses = (removeValue) => ({
+  type: CLEAR_EXPENSES,
+  removeValue,
 });
 
 export function catchAllCurrencies() {

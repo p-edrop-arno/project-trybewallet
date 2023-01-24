@@ -20,7 +20,8 @@ class Header extends Component {
           {
             expenses.length > 0 ? expenses.map((expense) => (
               Number(expense.exchangeRates[expense.currency].ask)
-                * Number(expense.value))).reduce((a, b) => a + b).toFixed(2) : 0
+              * Number(expense.value))).reduce((a, b) => a + b)
+              .toFixed(2) : Number(0).toFixed(2)
           }
         </p>
 
