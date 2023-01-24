@@ -1,12 +1,12 @@
-// ACTIONS TYPES
-export const LOGIN_EMAIL = 'LOGIN_EMAIL';
+export const GET_EMAIL = 'GET_EMAIL';
 export const GET_CURRENCIES = 'GET_CURRENCIES';
-export const NEW_EXPENSES = 'NEW_EXPENSES';
-export const CLEAR_EXPENSES = 'CLEAR_EXPENSES';
+export const NEW_EXPENSE = 'NEW_EXPENSE';
+export const CLEAR_EXPENSE = 'CLEAR_EXPENSE';
+export const EDITING_EXPENSE = 'EDITING_EXPENSE';
+export const FULL_EDIT = 'FULL_EDIT';
 
-// ACTIONS CREATORS
-export const loginEmail = (email) => ({
-  type: LOGIN_EMAIL,
+export const getEmail = (email) => ({
+  type: GET_EMAIL,
   email,
 });
 
@@ -15,18 +15,30 @@ export const getCurrencies = (currencies) => ({
   currencies,
 });
 
-export const newExpenses = (state) => ({
-  type: NEW_EXPENSES,
+export const newExpense = (state) => ({
+  type: NEW_EXPENSE,
   state,
 });
 
-export const clearExpenses = (removeValue) => ({
-  type: CLEAR_EXPENSES,
-  removeValue,
+export const clearExpense = (expenseId) => ({
+  type: CLEAR_EXPENSE,
+  expenseId,
 });
 
-export function catchAllCurrencies() {
+export const editingExpense = (expense) => ({
+  type: EDITING_EXPENSE,
+  expense,
+});
+export const fullEdit = (expense) => ({
+  type: FULL_EDIT,
+  expense,
+});
+
+export function fetchCurrencies() {
   return (dispatch) => fetch('https://economia.awesomeapi.com.br/json/all')
     .then((response) => response.json())
-    .then((currencies) => dispatch(getCurrencies(currencies)));
+    .then((currencies) => {
+      delete currencies.USDT;
+      dispatch(getCurrencies(currencies));
+    });
 }

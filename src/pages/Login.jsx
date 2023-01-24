@@ -1,74 +1,69 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import { connect } from 'react-redux';
-import { loginEmail } from '../redux/actions';
+import PropTypes from 'prop-types';
+import { getEmail } from '../redux/actions';
 
-class Login extends Component {
+class Login extends React.Component {
   state = {
     email: '',
     password: '',
   };
 
-  validates = () => {
-    const { email, password } = this.state;
-    const reEmail = /\S+@\S+\.\S+/;
-    const minLength = 6;
-
-    if (reEmail.test(email) && password.length >= minLength) return true;
-  };
-
-  onHandleChange = ({ target }) => {
+  handleChange = ({ target }) => {
     const { name, value } = target;
     this.setState({ [name]: value });
   };
 
+  isValidLogin = () => {
+    const { email, password } = this.state;
+    const minimumPasswordLength = 6;
+    return (email.includes('@') && email.includes('.com')
+    && password.length >= minimumPasswordLength);
+  };
+
   onClickChange = () => {
-    const { history, dispatch } = this.props;
+    const { dispatch, history } = this.props;
     const { email } = this.state;
-    dispatch(loginEmail(email));
+    dispatch(getEmail(email));
     history.push('/carteira');
   };
 
   render() {
     const { email, password } = this.state;
-
     return (
-      <form>
+      <div>
 
-        <label htmlFor="email">
-          <input
-            type="text"
-            id="email"
-            data-testid="email-input"
-            name="email"
-            placeholder="Email"
-            value={ email }
-            onChange={ this.onHandleChange }
-            required
-          />
-        </label>
+        <input
+          type="text"
+          name="email"
+          id="email"
+          data-testid="email-input"
+          onChange={ this.handleChange }
+          value={ email }
+          required
+          placeholder="email"
+        />
 
-        <label htmlFor="password">
-          <input
-            type="password"
-            id="password"
-            data-testid="password-input"
-            name="password"
-            value={ password }
-            onChange={ this.onHandleChange }
-            required
-          />
-        </label>
+        <input
+          type="password"
+          name="password"
+          id="password"
+          data-testid="password-input"
+          onChange={ this.handleChange }
+          value={ password }
+          required
+          placeholder="senha"
+        />
 
         <button
           type="button"
-          disabled={ !this.validates() }
+          disabled={ !this.isValidLogin() }
           onClick={ this.onClickChange }
         >
           Entrar
         </button>
 
-      </form>
+      </div>
     );
   }
 }

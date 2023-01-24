@@ -1,8 +1,14 @@
-import { GET_CURRENCIES, NEW_EXPENSES, CLEAR_EXPENSES } from '../actions';
+import {
+  GET_CURRENCIES,
+  NEW_EXPENSE,
+  CLEAR_EXPENSE,
+  EDITING_EXPENSE,
+  FULL_EDIT,
+} from '../actions';
 
 const INITIAL_STATE = {
-  expenses: [],
   currencies: [],
+  expenses: [],
   editor: false,
   idToEdit: 0,
 };
@@ -10,27 +16,48 @@ const INITIAL_STATE = {
 const wallet = (state = INITIAL_STATE, action) => {
   switch (action.type) {
   case GET_CURRENCIES: {
-    const allCurrencies = [...Object.keys(action.currencies)];
-    allCurrencies.splice(1, 1);
     return {
       ...state,
-      currencies: allCurrencies,
+      currencies: [...Object.keys(action.currencies)],
     };
   }
 
-  case NEW_EXPENSES: {
+  case NEW_EXPENSE: {
     return {
       ...state,
       expenses: [...state.expenses, action.state],
-      idToEdit: action.state.id,
     };
   }
 
-  case CLEAR_EXPENSES: {
-    const currentExpenses = [...state.expenses];
+  case CLEAR_EXPENSE: {
+    const expensesList = [...state.expenses];
+
     return {
       ...state,
-      expenses: currentExpenses.filter((e) => e.id !== action.expense.id),
+      expenses: expensesList.filter((expense) => expense.id !== action.expenseId),
+    };
+  }
+
+  case EDITING_EXPENSE: {
+    return {
+      ...state,
+      editor: true,
+      idToEdit: action.expense.id,
+    };
+  }
+
+  case FULL_EDIT: {
+    const expensesList = [...state.expenses];
+    const expensesListUpdated = expensesList.map((expense) => {
+      if (expense.id === state.idToEdit) {
+        return { ...action.expense, id: expense.id };
+      } return expense;
+    });
+
+    return {
+      ...state,
+      editor: false,
+      expenses: expensesListUpdated,
     };
   }
 
